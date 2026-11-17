@@ -1,5 +1,4 @@
-import express, { urlencoded } from "express";
-import cookieParse  from "cookie-parser";
+import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -18,5 +17,12 @@ app.use(express.urlencoded({extended:true,limit:"16kb"}))
 app.use(express.static("public"))
 
 app.use(cookieParser())
+
+//routes
+import userRouter from './routes/user.routes.js'
+
+//router declare
+
+app.use("/api/v1/users",userRouter)
 
 export {app}
