@@ -25,7 +25,7 @@ const Userschema=new Schema(
         trim:true,
         index:true
     },
-    avatar:{
+    avtar:{
         type:String,
         required:true,
     },
@@ -51,7 +51,7 @@ const Userschema=new Schema(
 
 Userschema.pre("save",async function (next){
     if(this.isModified("password")){
-    this.password=bcrypt.hash(this.password,10)
+    this.password=await bcrypt.hash(this.password,10)
     next()
     }
 })
