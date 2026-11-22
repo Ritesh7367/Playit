@@ -15,7 +15,7 @@ const registerUser=asyncHandler (async (req,res)=>{
     //check for user creation 
     //return res
 
-    //get data from frontend
+    //get data from frontend 
     const {fullname,email,username,password} =req.body
     console.log("email",email);
 
@@ -25,7 +25,7 @@ const registerUser=asyncHandler (async (req,res)=>{
     }
 
     //check user already exist-username,email
-    const existeduser=User.findOne(
+    const existeduser=await User.findOne(
         {
             $or:[{email},{username}]
         }
@@ -35,8 +35,8 @@ const registerUser=asyncHandler (async (req,res)=>{
     }
 
     //check for image and avtar
-    const avtarLocalPath=req.files?.avtar[0]?.path;
-    const coverImageLocalPath=req.files?.coverImage[0]?.path;
+    const avtarLocalPath=req.files?.avtar?.[0]?.path;
+    const coverImageLocalPath=req.files?.coverImage?.[0]?.path;
     if (!avtarLocalPath) {
         throw new ApiError(400,"avtar is required")
     }
@@ -54,7 +54,7 @@ const registerUser=asyncHandler (async (req,res)=>{
     const user=await User.create({
                     fullname,
                     avtar:avtar.url,
-                    coverImage:coverImage?.url||"",
+                    coverimage:coverImage?.url||"",
                     email,
                     password,
                     username:username.toLowerCase()
