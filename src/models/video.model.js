@@ -19,7 +19,7 @@ const VideoSchema=new Schema(
             type:String,
             required:true
         },
-        description:{
+        duration:{
             type:Number,
             required:true
         },
