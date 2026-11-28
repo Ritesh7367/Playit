@@ -102,7 +102,7 @@ const loginUser=asyncHandler(async (req,res)=>{
     const {email,username,password}=req.body
 
     //username or email
-    if(!(username || password)){
+    if(!(username || email)|| !password){
         throw new ApiError(400,"username or email required")
     }
     const user=await User.findOne({
@@ -143,8 +143,8 @@ const logoutUser=asyncHandler(async(req,res)=>{
       await User.findByIdAndUpdate(
             req.user._id,
             {
-                $set:{
-                refreshToken:undefined
+                $unset:{
+                refreshToken:1
                 }
             },
             {
@@ -189,7 +189,7 @@ const refreshAccessToken=asyncHandler(async (req,res)=>{
         return res.status(200)
         .cookie("accessToken",accessToken)
         .cookie("refreshToken",newRefreshToken)
-        .json(new ApiResponse(200,{accessToken,refreshToken:newRefreshToken},"access token refreshed"))
+        .json(new ApiResponse(200,{accessToken,newRefreshToken},"access token refreshed"))
     
     
     } catch (error) {
@@ -237,7 +237,7 @@ const updateUserProfile=asyncHandler(async (req,res)=>{
         {
             new:true
         }
-    ).select("-password")
+    ).select("-password -refreshToken")
 
     return res.status(200).json(new ApiResponse(200,user,"user profile updated successfully"))
 })
